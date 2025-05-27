@@ -3,44 +3,37 @@ import React from "react";
 import CompanionCard from "@/components/CompanionCard";
 import CompanionsList from "@/components/CompanionsList";
 import CTA from "@/components/CTA";
-import { recentSessions } from "@/constants";
+import {
+    getAllCompanions,
+    getRecentSessions,
+} from "@/lib/actions/companion.actions";
+import { getSubjectColor } from "@/lib/utils";
 
-const Page = () => {
+const Page = async () => {
+    const companions = await getAllCompanions({ limit: 3 });
+
+    const recentSessionsCompanions = (await getRecentSessions(10));
+
     return (
         <main>
             <h1 className="text-2xl underline">Companheiros Populares</h1>
             <section className="home-section">
-                <CompanionCard
-                    id="123"
-                    name="Neura, a Exploradora Inteligente"
-                    topic="Tópico: Rede Neural do Cérebro"
-                    subject="Ciência"
-                    duration={45}
-                    color="#E5D0FF"
-                />
-                <CompanionCard
-                    id="456"
-                    name="Countsy, o Mago dos Números"
-                    topic="Tópico: Derivadas e Integrais"
-                    subject="Matemática"
-                    duration={30}
-                    color="#ffda6e"
-                />
-                <CompanionCard
-                    id="789"
-                    name="Verba, o Construtor de Vocabulário"
-                    topic="Tópico: Literatura Inglesa"
-                    subject="Vocabulário"
-                    duration={30}
-                    color="#BDE7FF"
-                />
+                {companions.map((companion) => (
+                    <CompanionCard
+                        key={companion.id}
+                        {...companion}
+                        color={getSubjectColor(companion.subject)}
+                    />
+                ))}
             </section>
             <section className="home-section">
-                <CompanionsList
-                    title="Sessões completas recentemente"
-                    companions={recentSessions}
-                    classNames="w-2/3 max-lg:w-full"
-                />
+                {recentSessionsCompanions && (
+                    <CompanionsList
+                        title="Sessões completas recentemente"
+                        companions={recentSessionsCompanions}
+                        classNames="w-2/3 max-lg:w-full"
+                    />
+                )}
                 <CTA />
             </section>
         </main>
