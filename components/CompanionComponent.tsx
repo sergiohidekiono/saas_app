@@ -98,8 +98,7 @@ const CompanionComponent = ({
             serverMessages: [],
         };
 
-        //@ts-expect-error
-        vapi.start(configureAssistant(voice, style), assistantOverrides);
+        vapi.start(configureAssistant(voice, style), assistantOverrides as any);
     };
 
     const handleDisconnect = () => {
