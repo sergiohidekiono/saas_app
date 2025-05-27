@@ -48,19 +48,6 @@ export const getAllCompanions = async ({
     return companions;
 };
 
-export const getCompanion = async (id: string) => {
-    const supabase = createSupabaseClient();
-
-    const { data, error } = await supabase
-        .from("companions")
-        .select()
-        .eq("id", id);
-
-    if (error) return console.log(error);
-
-    return data[0];
-};
-
 export const addToSessionHistory = async (companionId: string) => {
     const { userId } = await auth();
     const supabase = createSupabaseClient();
@@ -189,4 +176,17 @@ export const getBookmarkedCompanions = async (userId: string) => {
     }
     // We don't need the bookmarks data, so we return only the companions
     return data.map(({ companions }) => companions);
+};
+
+export const getCompanion = async (id: string) => {
+    const supabase = createSupabaseClient();
+
+    const { data, error } = await supabase
+        .from("companions")
+        .select("*")
+        .eq("id", id);
+
+    if (error) return console.log(error);
+
+    return data[0];
 };
